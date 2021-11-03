@@ -4,23 +4,22 @@ namespace leetcode
 	class problem1031
 	{
 	public:
-        int findRadius(vector<int>& houses, vector<int>& heaters)
+        int maxSumTwoNoOverlap(vector<int>& nums, int m, int n)
         {
-            sort(houses.begin(), houses.end());
-            sort(heaters.begin(), heaters.end());
-
+            nums.insert(nums.begin(), 0);
+            for (int i = 1; i < nums.size(); i++)
+                nums[i] += nums[i - 1];
 
             int res = INT_MIN;
-            heaters.insert(heaters.begin(), INT_MIN + heaters.front());
-            heaters.push_back(INT_MAX);
-
-            for (auto i : houses)
-            {
-                auto it = lower_bound(heaters.begin(), heaters.end(), i);
-                res = max(res, *it == i ? 0 : min(i - *(it - 1), *it - i));
-            }
-
+            for (int i = 1; i < nums.size(); i++)
+                for (int j = i + 1; j < nums.size(); j++)
+                {
+                    int midsum = j - i > 1 ? nums[j - 1] - nums[i] : 0;
+                    int a = j + m - 1 < nums.size() && i - n >= 0 ? nums[j + m - 1] - nums[i - n] - midsum : INT_MIN;
+                    int b = j + n - 1 < nums.size() && i - m >= 0 ? nums[j + n - 1] - nums[i - m] - midsum : INT_MIN;
+                    res = max(res, max(a, b));
+                }
             return res;
         }
-    };
+	};
 }
