@@ -18,9 +18,8 @@ namespace leetcode
 
             for (auto i : houses)
             {
-                auto low = lower_bound(heaters.begin(), heaters.end(), i),
-                    high = upper_bound(heaters.begin(), heaters.end(), i);
-                res = max(res, low != high ? 0 : min((long long)i - (long long)*(low - 1), (long long)*high - (long long)i));
+                auto it = lower_bound(heaters.begin(), heaters.end(), i);
+                res = max(res, *it == i ? 0 : min((long long)i - (long long)*(it - 1), (long long)*it - (long long)i));
             }
 
             return res;
